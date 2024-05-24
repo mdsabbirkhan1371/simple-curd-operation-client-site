@@ -1,8 +1,11 @@
-import { useLoaderData } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLoaderData } from "react-router-dom";
 
 
 const Users = () => {
-    const users =useLoaderData()
+    const usersData =useLoaderData()
+
+    const [users,setUsers]=useState(usersData)
 
     const handelDelete=(_id)=>{
         console.log(_id)
@@ -14,6 +17,9 @@ const Users = () => {
             console.log(data)
             if(data.deletedCount>0){
                 alert('Your Data is Deleted From DB')
+
+                const remaining =users.filter(user=>user._id !==_id)
+                setUsers(remaining)
             }
         })
     }
@@ -25,7 +31,11 @@ const Users = () => {
 
            <div>
             {
-                users.map(user=><p key={user._id}>Name:{user.name} email: {user.email} <button onClick={()=>handelDelete(user._id)}>X</button></p>)
+                users.map(user=><p key={user._id}>Name:{user.name} email: {user.email}
+                <Link to={`/update/${user._id}`}>
+                    <button>Update</button>
+                </Link>
+                 <button onClick={()=>handelDelete(user._id)}>X</button></p>)
                 
             }
             
